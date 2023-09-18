@@ -1,62 +1,46 @@
 #include "main.h"
 
 /**
- * _printf - produces output accordng to format
+ * _printf - produces output according to format
  * @format: format according to the argument to be printed
- * Return: Number of printed character
+ * Return: Number of printed characters
  */
 int _printf(const char *format, ...)
 {
 	int num = 0;
-	int str_len = 0;
-
 	va_list args;
 
-	if (*format == NULL)
+	if (format == NULL)
 		return (-1);
 
 	va_start(args, format);
 
 	while (*format)
 	{
-		if (*format != '%')
-		{
-			write(1, format, 1);
-			num ++;
-		}
-		else
+		if (*format == '%')
 		{
 			format++;
-
-			if (*format == '\0')
-				break;
-			if (*format == '%')
-			{
-				write(1, format, 1);
-				num++;
-			}
-
-			else if (*format == 'c')
+			if (*format == 'c')
 			{
 				char c = va_arg(args, int);
-				write(1, &c, 1);
-				num++
-			}
 
+				num += write(1, &c, 1);
+			}
 			else if (*format == 's')
 			{
 				char *str = va_arg(args, char*);
-				for (int i = 0; str[i] != '\0'; i++)
-				{
-					str_len++;
-					write(1, str, str_len);
-					num += str_len;
-				}
+
+				if (str == NULL)
+					str = "(null)";
+				num += write(1, str, strlen(str));
 			}
-			format++;
+			else if (*format != '%')
+				num += write(1, format - 1, 1);
 		}
+		else
+			num += write(1, format, 1);
+		format++;
 	}
 	va_end(args);
 	return (num);
 }
-
