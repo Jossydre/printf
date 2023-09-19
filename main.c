@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "main.h"
 
 int main()
@@ -11,4 +12,3 @@ int main()
 	_printf("Hello, Team\n");
 
 	return (0);
-}
