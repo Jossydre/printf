@@ -1,7 +1,11 @@
-<<<<<<< HEAD
 #include "main.h"
 
-int main()
+/**
+ * main - entry point
+ *
+ * Return: 0
+ */
+int main(void)
 {
 	printf("Output Standard form\n");
 	printf("Hello, Team");
@@ -12,3 +16,4 @@ int main()
 	_printf("Hello, Team\n");
 
 	return (0);
+}
