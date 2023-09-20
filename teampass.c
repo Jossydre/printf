@@ -1,6 +1,6 @@
 #include "main.h"
 /**
- * parser - Parse a format string and perform conversions
+ * parser - Parse format string and perform conversions
  * @format: The format string to be parsed, containing format specifiers
  * @funct_list: An array of conversion specifiers
  * and their associated functions
