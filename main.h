@@ -8,25 +8,25 @@
 #include <stdlib.h>
 
 /**
- * struct conver_t - structure to represent conversion functions
- * @sym: format specifier symbol
- * @f: pointer to the conversion function
+ * struct specifiers - Struct specifiers
+ * @specifier: The conversion specifier
+ * @f: function pointer
  */
-typedef struct
+typedef struct specifiers
 {
-	const char *sym;
-	int (*f)(va_list);
-} conver_t;
+	char *spec;
+	int (*f)(va_list args);
+} specy_datype;
 
-
-int _putchar(char c);
+int _print_form(const char *format, va_list args);
+int _valid_char(char type);
+int print_invalid(char prev_form, char format, int num_count);
+int print_spe(char format, va_list args);
+int _write(char c);
+int _print_char(va_list args);
+int _print_str(va_list args);
+int _print_int(va_list args);
+void _recursion_int(int e);
 int _printf(const char *format, ...);
-int parser(const char *format, conver_t funct_list[], va_list args);
-int team_int(va_list);
-int team_per(va_list);
-int team_str(va_list args);
-int team_char(va_list);
-int print_unsigned_number(unsigned int m);
-int print_number(va_list);
 
 #endif

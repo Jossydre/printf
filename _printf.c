@@ -1,33 +1,22 @@
 #include "main.h"
+
 /**
- * _printf - produces output according to format
- * @format: format string specifying the format and arguments
- * @...: variadic argument
- * Return: number of characters printed
+ * _printf - function my printf
+ * @format: string whit format to print
+ *
+ * Return: number of chars that print
  */
 int _printf(const char *format, ...)
 {
-	int print_char;
-
-	conver_t funct_list[] =	{
-		{"c", team_char},
-		{"s", team_str},
-		{"%", team_per},
-		{"d", team_int},
-		{"i", team_int},
-		{NULL, NULL}
-	};
-
 	va_list args;
-
+	int lent = 0;
 
 	if (format == NULL)
 		return (-1);
 
 	va_start(args, format);
 
-	print_char = parser(format, funct_list, args);
+	lent = _print_form(format, args);
 	va_end(args);
-
-	return (print_char);
+	return (lent);
 }

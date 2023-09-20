@@ -1,102 +1,120 @@
 #include "main.h"
 
 /**
- * print_number - print numbers to a standard output
- * @args: argument passed
- * Return: length of a given number
+ * _print_form - Print the format
+ * @format: Format to be printed
+ * @args: The list of variadic arguments
+ *
+ * Return: The length of the format
  */
-int print_number(va_list args)
+int _print_form(const char *format, va_list args)
 {
-	int u;
-	int checks;
-	int leng;
-	unsigned int numb;
+	int num_count = 0;
+	int b = 0;
 
-	u  = va_arg(args, int);
-	checks = 1;
-	leng = 0;
-	if (u < 0)
+	while (format && format[b])
 	{
-		leng += _putchar('-');
-		numb = u * -1;
+		if (format[b] == '%')
+		{
+			if (format[b + 1] == '\0')
+				return (-1);
+
+			b++;
+
+			while (format[b] == ' ')
+				b++;
+
+			if (format[b] == '%')
+				num_count += _write(format[b]);
+
+			if (_valid_char(format[b]) == 0)
+			{
+				num_count = print_invalid(format[b - 1], format[b], num_count);
+			}
+			else
+			{
+				num_count += print_spe(format[b], args);
+			}
+		}
+		else
+		{
+			num_count += _write(format[b]);
+		}
+		b++;
+	}
+	return (num_count);
+}
+
+/**
+ * print_spe - Prints valid specifier
+ * @format: Specifier to be printed
+ * @args: list of variadic arguments
+ *
+ * Return: The length of the specifier
+ */
+int print_spe(char format, va_list args)
+{
+	int m  = 0, lenh = 0;
+	specy_datype _types[] = {
+		{"c", _print_char},
+		{"s", _print_str},
+		{"d", _print_int},
+		{"i", _print_int},
+		{NULL, NULL}
+	};
+
+	while (_types[m].spec)
+	{
+		if (*_types[m].spec == format)
+			lenh = _types[m].f(args);
+
+		m++;
+	}
+
+	return (lenh);
+}
+
+/**
+ * print_invalid - Prints invalid specifier
+ * @prev_form: Previous specifier of actual specifier
+ * @format: Specifier to prints
+ * @num_count: Current count before printing invalid specifiers
+ *
+ * Return: The current count after prints invalid specifiers
+ */
+int print_invalid(char prev_form, char format, int num_count)
+{
+	num_count += _write('%');
+
+	if (prev_form == ' ')
+	{
+		num_count += _write(' ');
+		num_count += _write(format);
 	}
 	else
-		numb = u;
-	for (; numb / checks > 9; )
-		checks *= 10;
-	for (; checks != 0; )
 	{
-		leng += _putchar('0' + numb / checks);
-		numb %= checks;
-		checks /= 10;
+		num_count += _write(format);
 	}
-	return (leng);
+
+	return (num_count);
 }
 
 /**
- * print_unsigned_number - print unsigned numbers
- * @m: numbers to be printed
- * Return: lenght of number
+ * _valid_char - validates type
+ * @type: character compared
+ *
+ * Return: 1 if char is equals type
  */
-int print_unsigned_number(unsigned int m)
+int _valid_char(char type)
 {
-	int checks;
-	int leng;
-	unsigned int numb;
+	char types[] = {'c', 's', 'd', 'i', '%'};
+	int ch = 0;
 
-	checks = 1;
-	leng = 0;
-	numb = m;
-	for (; numb / checks > 9; )
-		checks *= 10;
-	for (; checks != 0; )
+	while (types[ch])
 	{
-		leng += _putchar('0' + numb / checks);
-		numb %= checks;
-		checks /= 10;
+		if (types[ch] == type)
+			return (1);
+		ch++;
 	}
-	return (leng);
-}
-
-/**
- * team_char - character argument
- * @args: number of chararcter argument
- * Return: 1 success
- */
-int team_char(va_list args)
-{
-	char val;
-
-	val = va_arg(args, int);
-	_putchar(val);
-	return (1);
-}
-
-/**
- * team_str - string argument
- * @args: number of string argument
- * Return: integer
- */
-int team_str(va_list args)
-{
-	int t;
-	const char *s;
-
-	s = va_arg(args, const char *);
-	if (s == NULL)
-		s = "(null)";
-	for (t = 0; s[t] != '\0'; t++)
-		_putchar(s[t]);
-	return (t);
-}
-
-/**
- * team_per - percent argument
- * @args: number of argument passed
- * Return: 1
- */
-int team_per(__attribute__((unused)) va_list args)
-{
-	_putchar('%');
-	return (1);
+	return (0);
 }
